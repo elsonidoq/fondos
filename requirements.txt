@@ -1,2 +1,3 @@
+pymongo
 fito==0.2.3
 tqdm
