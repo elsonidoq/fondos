@@ -1,1 +1,1 @@
-python download.py
+daemon: python download.py
