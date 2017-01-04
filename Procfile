@@ -1,1 +1,0 @@
-daemon: python download.py
