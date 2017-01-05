@@ -11,7 +11,7 @@ ds = FileDataStore(os.path.join(here, 'downloads'))
 
 @ds.cache()
 def download(datetime):
-    url = 'http://www.santanderrio.com.ar/banco/online/personas/inversiones/super-fondos/rendimientos'
+    url = 'http://www.santanderrio.com.ar/ConectorPortalStore/Rendimiento'
     return urlopen(url).read()
 
 
