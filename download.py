@@ -18,13 +18,12 @@ def download(datetime):
 
 
 if __name__ == '__main__':
-    while True:
-        try:
-            print "downloading..."
-            download(datetime.now())
-            print "sleeping..."
-            for _ in tqdm(xrange(60*60)):
-                sleep(1)
-        except Exception, e:
-            traceback.print_exc()
-            print
+    try:
+        print "downloading..."
+        download(datetime.now())
+        print "sleeping..."
+        for _ in tqdm(xrange(60*60)):
+            sleep(1)
+    except Exception, e:
+        traceback.print_exc()
+        print
