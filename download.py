@@ -17,8 +17,9 @@ def download(datetime):
 
 if __name__ == '__main__':
     try:
-        print "downloading..."
-        download(datetime.now())
+        now = datetime.now()
+        print "downloading for {}...".format(now)
+        download(now)
     except Exception, e:
         traceback.print_exc()
         print
