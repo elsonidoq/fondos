@@ -15,7 +15,11 @@ here = os.path.abspath(os.path.dirname(__file__))
 class InvertirOnlineDownloader(Operation):
     bond_name = PrimitiveField(0)
     timestamp = PrimitiveField(default=None)
-    default_data_store = FileDataStore(os.path.join(here, 'invertir_online'), serializer=RawSerializer())
+
+    default_data_store = FileDataStore(
+        os.path.join(here, 'invertir_online'),
+        serializer=RawSerializer()
+    )
 
     def __init__(self, *args, **kwargs):
         super(InvertirOnlineDownloader, self).__init__(*args, **kwargs)
@@ -25,18 +29,23 @@ class InvertirOnlineDownloader(Operation):
         url = 'https://www.invertironline.com/titulo/cotizacion/bcba/{}'.format(self.bond_name)
         return urlopen(url).read()
 
+
 def strip_accents(s):
     if not isinstance(s, unicode): s = s.decode('utf8')
     return ''.join(c for c in unicodedata.normalize('NFD', s)
                    if unicodedata.category(c) != 'Mn')
 
+
 def extract_string(elem):
     res = elem.text_content()
 
-    if isinstance(res, unicode): res = unicode(res)
-    else: res = str(res)
+    if isinstance(res, unicode):
+        res = unicode(res)
+    else:
+        res = str(res)
 
     return res
+
 
 def parse_table(html):
     np = re.compile('^\d+(\.\d+)$', re.U)
@@ -47,13 +56,12 @@ def parse_table(html):
 
     rows = table.cssselect('tr')[1:]
 
-    res = []
+    res = {}
     for row in rows:
         tds = row.cssselect('td')
         ks = [td for i, td in enumerate(tds) if i % 2 == 0]
         vs = [td for i, td in enumerate(tds) if i % 2 == 1]
 
-        l = []
         for i, (k, v) in enumerate(zip(ks, vs)):
             k = (
                 sp.sub(' ',
@@ -61,25 +69,24 @@ def parse_table(html):
                            extract_string(k)
                        )
                        .replace('\n', ' ')
-                )
-                .replace(':', '')
-                .replace('.', '')
-                .strip()
-                .replace(' ', '_')
-                .lower()
+                       )
+                    .replace(':', '')
+                    .replace('.', '')
+                    .strip()
+                    .replace(' ', '_')
+                    .lower()
             )
             v = (
                 v
-                .text_content()
-                .replace('$', '')
-                .replace('%', '')
-                .replace('.', '')
-                .replace(',', '.')
-                .strip()
+                    .text_content()
+                    .replace('$', '')
+                    .replace('%', '')
+                    .replace('.', '')
+                    .replace(',', '.')
+                    .strip()
             )
             if np.match(v): v = float(v)
 
-            l.append((k, v))
+            res[k] = v
 
-        res.append(l)
     return res
