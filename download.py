@@ -1,6 +1,6 @@
 import os
 
-import datetime
+from datetime import datetime
 
 from invertironline import InvertirOnlineDownloader
 
