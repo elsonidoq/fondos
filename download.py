@@ -1,5 +1,7 @@
 import os
 
+import datetime
+
 from invertironline import InvertirOnlineDownloader
 
 here = os.path.abspath(os.path.dirname(__file__))
@@ -11,6 +13,7 @@ def main():
         'ay24'
     ]
 
+    print "Downloading {}".format(datetime.now())
     for bond in bonds:
         InvertirOnlineDownloader(bond).execute()
 
