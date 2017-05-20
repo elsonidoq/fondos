@@ -15,7 +15,8 @@ from fito.data_store import FileDataStore
 here = os.path.dirname(__file__)
 ds = FileDataStore(
     os.path.abspath(os.path.join(here,'caches')),
-    get_cache_size=1000
+    get_cache_size=1000,
+    execute_cache_size=1000
 )
 
 Series = namedtuple('Series', 'source data'.split())
@@ -41,10 +42,14 @@ class Quote(Spec):
         series = self.get_data().execute()
         if series is not None: return series.data
 
-    def get_returns(self, field='close', start_date=None):
+    def get_returns(self, field='close', start_date=None, end_date=None):
         series = self.data[field.capitalize()]
         if start_date is not None: series = series[start_date:]
-        return series / series.iloc[0]
+
+        res = series / series.iloc[0]
+
+        if end_date is not None: res = res[:end_date]
+        return res
 
     @classmethod
     def fetch_all(cls, tickers):
@@ -72,10 +77,10 @@ class Portfolio(Spec):
         if abs(total - 1) > 0.000001:
             raise RuntimeError('Invalid portfolio, sum(self.quotes.values()) == {}'.format(total))
 
-    def get_returns(self, field='close', start_date=None):
+    def get_returns(self, field='close', start_date=None, end_date=None):
         res = 0
         for i, quote in enumerate(self.quotes):
-            res += self.weights[i] * quote.get_returns(field, start_date)
+            res += self.weights[i] * quote.get_returns(field, start_date, end_date)
         return res
 
     def get_volatility(self, field='close', start_date=None):
