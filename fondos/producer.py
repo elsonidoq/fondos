@@ -9,11 +9,11 @@ from fondos import portfolio_selection
 
 tickers = ['APBR', 'PAMP', 'YPFD', 'GGAL', 'ERAR', 'CRES', 'COME', 'ALUA', 'FRAN', 'MIRG',
            'BMA', 'TRAN', 'TS', 'JMIN', 'EDN', 'TGSU2', 'SAMI', 'AGRO', 'TECO2', 'PESA',
-           'CEPU', 'CTIO', 'CECO2', 'AUSO', 'PETR', 'CELU', 'TGNO4']
+           'CEPU', 'CTIO', 'CECO2', 'AUSO', 'PETR', 'CELU', 'TGNO4', 'AY24']
 
 # for t in tickers:
 #     print Quote(t).data is None
-Quote.fetch_all(tickers)
+# Quote.fetch_all(tickers)
 
 tickers = [e for e in tickers if Quote(e).data is not None]
 tickers = [e for e in tickers if not Quote(e).data['2017-01-01':].empty]
@@ -42,7 +42,7 @@ def do_model_selection(exp_key):
 
     space = portfolio_selection.portfolio_space(
         start_date='2017-01-01',
-        end_date='2017-04-01',
+        end_date='2017-04-18',
         tickers=tickers,
         min_portfolio_size=3,
         max_portfolio_size=10
