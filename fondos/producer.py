@@ -44,6 +44,7 @@ def do_model_selection(exp_key):
         start_date='2017-01-01',
         end_date='2017-04-01',
         tickers=tickers,
+        min_portfolio_size=3,
         max_portfolio_size=10
     )
 
