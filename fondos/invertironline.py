@@ -18,7 +18,8 @@ class InvertirOnlineDownloader(Operation):
 
     default_data_store = FileDataStore(
         os.path.join(here, 'invertir_online'),
-        serializer=RawSerializer()
+        serializer=RawSerializer(),
+        get_cache_size=1000,
     )
 
     def __init__(self, *args, **kwargs):
@@ -28,6 +29,10 @@ class InvertirOnlineDownloader(Operation):
     def apply(self, runner):
         url = 'https://www.invertironline.com/titulo/cotizacion/bcba/{}'.format(self.bond_name)
         return urlopen(url).read()
+
+    @property
+    def data(self):
+        return parse_table(self.execute())
 
 
 def strip_accents(s):
